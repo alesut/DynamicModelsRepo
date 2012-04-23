@@ -1,0 +1,11 @@
+offices:
+  title: Офисы
+  fields:
+  - {id: department, title: Отдел, type: char}
+  - {id: spots, title: Вместимость, type: int}
+tables:
+  title: Столы
+  fields:
+  - {id: type, title: Тип, type: char}
+  - {id: size, title: Размер, type: int}
+

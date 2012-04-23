@@ -1,0 +1,116 @@
+{% load verbatim_tag %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Test web-application</title>
+    <style type='text/css'>
+        #tables_titles {
+            padding: 10px;
+            list-style-type: none;
+            width: 80%;
+            margin: 0 auto;
+        }
+        #tables_titles li {
+            border-style: solid solid none;
+            border-width: 1px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        #tables_titles li:last-child {
+            border-style: solid;
+        }
+        #tables_titles li:nth-child(odd) {
+            background: #dcdcdc;
+        }
+        #table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 0 auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        #table thead tr {
+            background: #808080;
+        }
+        #table tbody tr:nth-child(even) {
+            background: #dcdcdc;
+        }
+        #table_container {
+            padding-top: 10px;
+        }
+        form {
+            display: inline;
+        }
+        #left{
+            width: 30%;
+            float: left;
+        }
+        #right {
+            width: 68%;
+            display: inline-block;
+        }
+    </style>
+    <script type='text/javascript' src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
+    <script type='text/javascript' src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script id="table_content" type="text/x-jquery-tmpl">
+        {% verbatim %}
+        <table id='table'>
+            <thead>
+                <tr>
+                    {{each $data.head}}
+                    <th>${$value}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{each(i, list) $data.body}}
+                <tr>
+                    {{each list}}
+                    <td>${$value}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {% endverbatim %}
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('.tables_title').on('click', function () {
+                var table_name = $(this).data('title');
+                $('#table_container').empty();
+                $.getJSON('/receive_table_content/',
+                        {table_name: table_name},
+                        function (data) {
+                            if (data != 0) {
+                                $('#table_content').tmpl(data).appendTo('#table_container');
+                            }
+                        }
+                );
+            });
+        });
+    </script>
+</head>
+<body>
+<form method="POST" action="/create_models_from_file/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for='models_file'>Файл с моделями в формате YAML</label>
+    <input type='file' name='models' id='models_file'>
+    <input type="submit" value='Submit'>
+</form>
+<a href='/admin/'>Администраторская часть</a>
+<div id='left'>
+    <ul id="tables_titles">
+        {% for title in tables_titles %}
+        <li class="tables_title" data-title="{{title.db_title}}">{{ title.title }}</li>
+        {% endfor %}
+    </ul>
+</div>
+<div id='right'>
+    <div id='table_container'></div>
+</div>
+</body>
+</html>

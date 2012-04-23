@@ -1,0 +1,23 @@
+offices:
+  title: Офисы
+  fields:
+  - {id: department, title: Отдел, type: char}
+  - {id: size, title: Площадь, type: int}
+  - {id: spots, title: Вместимость, type: int}
+tables:
+  title: Столы
+  fields:
+  - {id: type, title: Тип, type: char}
+  - {id: size, title: Размер, type: int}
+users:
+  title: Пользователи
+  fields:
+  - {id: name, title: Имя, type: char}
+  - {id: paycheck, title: Зарплата, type: int}
+rooms:
+  title: Комнаты
+  fields:
+  - {id: department, title: Отдел, type: char}
+  - {id: description, title: Описание, type: char}
+  - {id: spots, title: Вместимость, type: int}
+  - {id: size, title: Площадь, type: int}
